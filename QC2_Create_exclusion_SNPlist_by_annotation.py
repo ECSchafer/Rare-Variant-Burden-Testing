@@ -8,37 +8,21 @@ import bisect
 import multiprocessing
 import time
 
+#Script that reads in VEP annotations and creates a list of SNPs to exclude for SNPs that do not include an annotation with canonical, protein_coding, HIGH impact variant
 
+#Command Line Arguments
 parser = optparse.OptionParser()
 parser.add_option("-v", "--vcffile", action="store",dest="vcffilename")
-parser.add_option("-o", "--outfile", action="store",dest="outfilename", default="outvcf.vcf")
 parser.add_option("--excludeoutfile", action="store",dest="excludeoutfilename", default="snps_to_exclude.txt")
+parser.add_option("--csq", action="store", dest="csq", default="HIGH")
 parser.add_option("--biotype", action="store", dest="biotype", default="protein_coding")
-parser.add_option("--csq", action="store", dest="csq", default="synonymous_variant")
 parser.add_option("-l", "--lines", action="store",dest="lines", default=5000)
 options, args = parser.parse_args()
 
 ##INFO=<ID=CSQ,Number=.,Type=String,Description="Consequence annotations from Ensembl VEP. Format: Allele|Consequence|IMPACT|SYMBOL|Gene|Feature_type|Feature|BIOTYPE|EXON|INTRON|HGVSc|HGVSp|cDNA_position|CDS_position|Protein_position|Amino_acids|Codons|Existing_variation|DISTANCE|STRAND|FLAGS|VARIANT_CLASS|SYMBOL_SOURCE|HGNC_ID|CANONICAL|MANE|TSL|APPRIS|CCDS|ENSP|SWISSPROT|TREMBL|UNIPARC|GENE_PHENO|SIFT|PolyPhen|DOMAINS|miRNA|AF|AFR_AF|AMR_AF|EAS_AF|EUR_AF|SAS_AF|AA_AF|EA_AF|gnomAD_AF|gnomAD_AFR_AF|gnomAD_AMR_AF|gnomAD_ASJ_AF|gnomAD_EAS_AF|gnomAD_FIN_AF|gnomAD_NFE_AF|gnomAD_OTH_AF|gnomAD_SAS_AF|MAX_AF|MAX_AF_POPS|CLIN_SIG|SOMATIC|PHENO|PUBMED|MOTIF_NAME|MOTIF_POS|HIGH_INF_POS|MOTIF_SCORE_CHANGE">
-
-
-
-biotype_option=str(options.biotype)
 csq_option=str(options.csq)
-
+biotype_option=str(options.biotype)
 ts=time.time()
-outfile=open(options.outfilename,'w')
-if str(options.vcffilename).endswith(".gz") is True:
-	vcffile=gzip.open(options.vcffilename, "rb")
-else:
-	vcffile=open(options.vcffilename, "r")
-for line in vcffile:
-	line_vcf=line.rstrip().split('\t')
-	if line_vcf[0][0]=="#":
-		outfile.write(str(line))
-	else:
-		break
-vcffile.close()
-outfile.close()
 
 #Read in vcf header and extract all INFO fields
 info_fields=[]
@@ -72,6 +56,7 @@ for line_vcf1 in vcffile:
 			break
 vcffile.close()       
 
+#Looking for VEP annotations that match the criteria we are looking for
 def find_biotype(annots):
 	csq_field_biotype_option="BIOTYPE"
 	biotype_index=csq_anno.index(csq_field_biotype_option)
@@ -82,7 +67,7 @@ def find_biotype(annots):
 	return out
 
 def find_consequence(annots):
-	csq_field_csq_option="Consequence"
+	csq_field_csq_option="IMPACT"
 	csq_index=csq_anno.index(csq_field_csq_option)
 	field_value=annots.split("|")[csq_index]
 	out=2
@@ -101,6 +86,8 @@ def canonical_vep(annots):
 exclude_outfile=open(options.excludeoutfilename,'w')
 exclude_outfile.close()
 
+#Iterates over annotations per SNP to try to find an annotation that is HIGH impact, protein_coding, and canonical
+#Writes to exclude file if all annotations do not match the criteria we are looking for 
 def write_output(line):
 	line_vcf=line.rstrip().split('\t')
 	if line_vcf[0][0]!="#" and ("," not in line_vcf[4]):
@@ -124,15 +111,11 @@ def write_output(line):
 					keep_var.append(2)
 				else:
 					keep_var.append(1)
-			print(keep_var)
-			if 1 in keep_var:
-				with open(options.outfilename, "a") as vcfout:
-					vcfout.write(str(line))	
-			else:
+			if 1 not in keep_var:
 				with open(options.excludeoutfilename, "a") as excludedout:
 					excludedout.write(str(snpid)+'\n')
 
-
+#Using multiprocessing to speed up script
 if __name__ == '__main__':
 	# Variables
 

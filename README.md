@@ -2,7 +2,7 @@
 
 *This is a work in progress pipeline to showcase the scripts I have been writing and working on*
 
-Scripts for running QC on exome data and harmonizing with publically available gnomAD controls and then counting rare variants 
+Scripts for running QC on exome data and harmonizing with publicaly available gnomAD controls and then counting rare variants 
 
 A pipeline expanding on TRAPD (Testing Rare vAriants using Public Data) pipeline described in Guo MH, Plummer L, Chan Y-M, Hirschhorn JN, Lippincott MF. Burden testing of rare variants identified through exome sequencing using publicly available control data. American Journal of Human Genetics. 2018. 103(4):522-534.
 

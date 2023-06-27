@@ -44,6 +44,10 @@ This filter cleans up things up a bit, but our lamda is still over 1 and we have
 
 Script to generate a list of SNPs where more than 2% of individuals have a bad allele balances (0.2>Allele balance>0.8)
 
+![image](https://github.com/ECSchafer/Rare-Variant-Burden-Testing/assets/123387175/3881ab68-4138-4038-b759-662d1242e035)
+
+With this step we have lowered the significance of the top genes to -e10. We have also filtered out OR4A16 as the top gene.
+
 # QC6 
 
 Script to generate a list of SNPs from our cases with an allele frequency greater than an input threshold. Allele frequency is calculated after filtering by individual level quality filters (depth>=10, genotype quality>=20, and 0.2< allele balance <0.8). We also use a list of SNPs with gnomAD POPMAX allele frequencies greater than our input threshold. 

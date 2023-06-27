@@ -48,7 +48,7 @@ This filter cleans up things up a bit, but our lamda is still over 1 and we have
 
 # QC6 
 
-Script to generate a list of SNPs where more than 2% of individuals have a bad allele balances (0.2>Allele balance>0.8)
+Script to generate a list of SNPs where more than 2% of individuals have a bad allele balance (0.2>Allele balance>0.8)
 
 ![image](https://github.com/ECSchafer/Rare-Variant-Burden-Testing/assets/123387175/3881ab68-4138-4038-b759-662d1242e035)
 

@@ -18,11 +18,9 @@ We use synoynmous variants to calibrate our QC conditions and see how well we ca
 
 QC1 involves generating a list of positions where 90% of samples have a depth>=10 at that position. We do this using GATK-depthofcoverage and bedtools intersect to generate a VCF of only positions meeting our criteria. 
 
-![image](https://github.com/ECSchafer/Rare-Variant-Burden-Testing/assets/123387175/1593715b-0fc8-48f0-bec0-f5b3b7b14643)
+![image](https://github.com/ECSchafer/Rare-Variant-Burden-Testing/assets/123387175/a2490315-8a8f-4e4d-b85e-cd2787b8a8b6)
 
-
-
-
+With just the coverage filter applied we see genes with a signifance of as high as -e89. We should be signing a lamda of 1 and see genes falling close to the line of harmony. We need to apply more filters.
 
 # QC2
 

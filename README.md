@@ -28,7 +28,7 @@ We chose to exclude SNPs with a case allele frequency greater than 0.1. SNPs wit
 
 # QC3 
 
-Splits the VCF by X Chromosome 
+Splits the VCF by X/Y/MT Chromosome 
 
 # QC4 
 

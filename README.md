@@ -18,7 +18,8 @@ We use synoynmous variants to calibrate our QC conditions and see how well we ca
 QC1 involves generating a list of positions where 90% of samples have a depth>=10 at that position. We do this using GATK-depthofcoverage and bedtools intersect to generate a VCF of only positions meeting our criteria. 
 
 
-![image](https://github.com/ECSchafer/Rare-Variant-Burden-Testing/assets/123387175/138eb378-5924-48e1-9e62-ae9e2734371e)
+![image](https://github.com/ECSchafer/Rare-Variant-Burden-Testing/assets/123387175/6bef0284-c5ff-4ad9-9d38-269408fc71e4)
+
 
 
 # QC2

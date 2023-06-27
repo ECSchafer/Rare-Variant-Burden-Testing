@@ -14,19 +14,17 @@ For each QC step we generate a list of SNPs to exclude from our cases and the gn
 
 We use synoynmous variants to calibrate our QC conditions and see how well we can harmonize our data with gnomAD. Synoynmous variants are thought to be benign and there should be no enrichment of genes in either dataset. We use a QQ plot to test our conditions and we are aiming for a lamda of 1. 
 
-I will show our QQ plots, we need certain criteria met before we could generate them such as MAF, removal of X/Y/MT, and VEP annotations.  .
+I will show our QQ plots at each QC step as we clean up the data and harmonize our dataset with gnomAD.
  
 # QC1
 
-QC1 involves generating a list of positions where 90% of samples have a depth>=10 at that position. We do this using GATK-depthofcoverage and bedtools intersect to generate a VCF of only positions meeting our criteria. 
-
-![image](https://github.com/ECSchafer/Rare-Variant-Burden-Testing/assets/123387175/a2490315-8a8f-4e4d-b85e-cd2787b8a8b6)
-
-With just the coverage filter applied we see genes with a significance of as high as -e89. We should be seeing a lamda of 1 and the genes falling close to the line of harmony. We need to apply more filters.
+Parses the VEP annotations and excludes SNPs that for example don't have a canonical, protein coding, synoynmous variant annotation (If running calibration step). We also use this to exclude SNPs that don't have a canonical, protein coding, HIGH impact or missense annotation when running the actual analysis 
 
 # QC2
 
-Parses the VEP annotations and excludes SNPs that do not contain a canonical annotation that is HIGH impact and protein coding 
+Script to generate a list of SNPs from our cases with an allele frequency greater than an input threshold. Allele frequency is calculated after filtering by individual level quality filters (depth>=10, genotype quality>=20, and 0.2< allele balance <0.8). We also use a list of SNPs with gnomAD POPMAX allele frequencies greater than our input threshold. 
+
+We chose to exclude SNPs with a case allele frequency greater than 0.1. SNPs with high allele frequency in our cases are likely due to sequencing artifacts. 
 
 # QC3 
 
@@ -34,13 +32,21 @@ Splits the VCF by X Chromosome
 
 # QC4 
 
-QC4 involves 2 scripts. The first script creates an exclusion list of SNPs that fail the "PASS" filter in the VCF. The second script finds SNPs in our cases that have no valid alleles after filtering individual genotypes by depth, genotype quality, and allele balance. Individual genotypes need to have a depth>=10, genotype quality>=20, and 0.2< allele balance <0.8 to be considered valid. This follows gnomADs methods.
+QC4 involves generating a list of positions where 90% of samples have a depth>=10 at that position. We do this using GATK-depthofcoverage and bedtools intersect to generate a VCF of only positions meeting our criteria. 
+
+![image](https://github.com/ECSchafer/Rare-Variant-Burden-Testing/assets/123387175/a2490315-8a8f-4e4d-b85e-cd2787b8a8b6)
+
+With just the coverage filter applied we see genes with a significance of as high as -e89. We should be seeing a lamda of 1 and the genes falling close to the line of harmony. We need to apply more filters.
+
+# QC5 
+
+QC5 involves 2 scripts. The first script creates an exclusion list of SNPs that fail the "PASS" filter in the VCF. The second script finds SNPs in our cases that have no valid alleles after filtering individual genotypes by depth, genotype quality, and allele balance. Individual genotypes need to have a depth>=10, genotype quality>=20, and 0.2< allele balance <0.8 to be considered valid. This follows gnomADs methods.
 
 ![image](https://github.com/ECSchafer/Rare-Variant-Burden-Testing/assets/123387175/71b0528a-d641-46c5-aba9-a38ec688f9a0)
 
 This filter cleans up things up a bit, but our lamda is still over 1 and we have genes with a significance greater than -e20
 
-# QC5 
+# QC6 
 
 Script to generate a list of SNPs where more than 2% of individuals have a bad allele balances (0.2>Allele balance>0.8)
 
@@ -48,9 +54,27 @@ Script to generate a list of SNPs where more than 2% of individuals have a bad a
 
 With this step we have lowered the significance of the top genes to -e10. We have also filtered out OR4A16 as the top gene.
 
-# QC6 
+# QC7
 
-Script to generate a list of SNPs from our cases with an allele frequency greater than an input threshold. Allele frequency is calculated after filtering by individual level quality filters (depth>=10, genotype quality>=20, and 0.2< allele balance <0.8). We also use a list of SNPs with gnomAD POPMAX allele frequencies greater than our input threshold. 
+A script that removes variants with a QD greater than 2. This follows one of gnomAD's filter criteria.
+
+![image](https://github.com/ECSchafer/Rare-Variant-Burden-Testing/assets/123387175/3eb6c95c-92be-4f31-bc8a-234b3e126e6f)
+
+This cleans up the graph really well and we see genes falling close to the line of harmony.
+
+# QC8
+
+With this QC step we removed related individuals.
+
+![image](https://github.com/ECSchafer/Rare-Variant-Burden-Testing/assets/123387175/ce8ee2c0-32aa-4e5b-841c-7b5f61e80efe)
+
+Our lamda is 0.98 and there is only one outlier gene.
+
+# Next Step: Run The Rare-Variant Burden Test On Protein Coding HIGH Impact Variants
+
+We have harmonized our data with gnomAD and are very satisfied with our QC filters. We can now apply these QC filters to protein coding HIGH impact and missense variants to find enriched genes in our cases.
+
+We currently have very promising preliminary results.
 
 # Make SNP file 
 

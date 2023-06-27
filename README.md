@@ -14,13 +14,15 @@ For each QC step we generate a list of SNPs to exclude from our cases and the gn
 
 We use synoynmous variants to calibrate our QC conditions and see how well we can harmonize our data with gnomAD. Synoynmous variants are thought to be benign and there should be no enrichment of genes in either dataset. We use a QQ plot to test our conditions and we are aiming for a lamda of 1. 
 
+I will show our QQ plots, we need certain criteria met before we could generate them such as MAF, removal of X/Y/MT, and VEP annotations.  .
+ 
 # QC1
 
 QC1 involves generating a list of positions where 90% of samples have a depth>=10 at that position. We do this using GATK-depthofcoverage and bedtools intersect to generate a VCF of only positions meeting our criteria. 
 
 ![image](https://github.com/ECSchafer/Rare-Variant-Burden-Testing/assets/123387175/a2490315-8a8f-4e4d-b85e-cd2787b8a8b6)
 
-With just the coverage filter applied we see genes with a signifance of as high as -e89. We should be signing a lamda of 1 and see genes falling close to the line of harmony. We need to apply more filters.
+With just the coverage filter applied we see genes with a significance of as high as -e89. We should be seeing a lamda of 1 and the genes falling close to the line of harmony. We need to apply more filters.
 
 # QC2
 
@@ -32,7 +34,11 @@ Splits the VCF by X Chromosome
 
 # QC4 
 
-QC4 involves 2 scripts. The first script creates an exclusion list of SNPs that fail the "PASS" filter in the VCF. The second script finds SNPs in our cases that have no valid alleles after filtering individual genotypes by depth, genotype quality, and allele balance. Individual genotypes need to have a depth>=10, genotype quality>=20, and 0.2< allele balance <0.8 to be considered valid. This follows gnomADs methods. 
+QC4 involves 2 scripts. The first script creates an exclusion list of SNPs that fail the "PASS" filter in the VCF. The second script finds SNPs in our cases that have no valid alleles after filtering individual genotypes by depth, genotype quality, and allele balance. Individual genotypes need to have a depth>=10, genotype quality>=20, and 0.2< allele balance <0.8 to be considered valid. This follows gnomADs methods.
+
+![image](https://github.com/ECSchafer/Rare-Variant-Burden-Testing/assets/123387175/71b0528a-d641-46c5-aba9-a38ec688f9a0)
+
+This filter cleans up things up a bit, but our lamda is still over 1 and we have genes with a significance greater than -e20
 
 # QC5 
 

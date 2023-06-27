@@ -8,9 +8,11 @@ A pipeline expanding on TRAPD (Testing Rare vAriants using Public Data) pipeline
 
 The original TRAPD scripts can be found here: https://github.com/mhguo1/TRAPD
 
-Harmonization of data when using publically available controls is crucial as even very small systematic differences between datasets can have large effects on results. My lab has been working to expand on the TRAPD methods by incorporating more rigorous QC steps and implementing a new counting algorithm.
+Harmonization of data when using publically available controls is crucial as even very small systematic differences between datasets can have large effects on results. My lab has been working to expand on the TRAPD methods by incorporating more rigorous QC steps and implementing a new counting algorithm. I have also optimized our pipeline by incorporating multiprocesing in python.
 
 For each QC step we generate a list of SNPs to exclude from our cases and the gnomAD controls. Then we combine the lists of SNPs to exclude and generate a new VCF by using the Exclude_snps_and_make_new_vcf script. 
+
+Once we have our variant counts for each gene, we perform a fischer's exact test to find enrichment of genes in our cases.
 
 We use synoynmous variants to calibrate our QC conditions and see how well we can harmonize our data with gnomAD. Synoynmous variants are thought to be benign and there should be no enrichment of genes in either dataset. We use a QQ plot to test our conditions and we are aiming for a lamda of 1. 
 

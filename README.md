@@ -13,12 +13,14 @@ Harmonization of data when using publically available controls is crucial as eve
 For each QC step we generate a list of SNPs to exclude from our cases and the gnomAD controls. Then we combine the lists of SNPs to exclude and generate a new VCF by using the Exclude_snps_and_make_new_vcf script. 
 
 We use synoynmous variants to calibrate our QC conditions and see how well we can harmonize our data with gnomAD. Synoynmous variants are thought to be benign and there should be no enrichment of genes in either dataset. We use a QQ plot to test our conditions and we are aiming for a lamda of 1. 
+
 # QC1
 
 QC1 involves generating a list of positions where 90% of samples have a depth>=10 at that position. We do this using GATK-depthofcoverage and bedtools intersect to generate a VCF of only positions meeting our criteria. 
 
+![image](https://github.com/ECSchafer/Rare-Variant-Burden-Testing/assets/123387175/1593715b-0fc8-48f0-bec0-f5b3b7b14643)
 
-![image](https://github.com/ECSchafer/Rare-Variant-Burden-Testing/assets/123387175/6bef0284-c5ff-4ad9-9d38-269408fc71e4)
+
 
 
 
